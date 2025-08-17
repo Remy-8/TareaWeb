@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportar Incidencia - Incidencias RD</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navegación -->
+    <nav class="navbar">
+        <div class="nav-brand">🚨 Incidencias RD</div>
+        <div class="nav-links">
+            <a href="index.html">Inicio</a>
+            <a href="login.html">Login</a>
+            <a href="report.html" class="active">Reportar</a>
+            <a href="validation.html">Validador</a>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <main class="container">
+        <h1>📝 Reportar Nueva Incidencia</h1>
+        
+        <form class="report-form" onsubmit="return enviarReporte(event)">
+            <!-- Información Básica -->
+            <div class="form-section">
+                <h2>Información Básica</h2>
+                
+                <div class="form-group">
+                    <label>Fecha y Hora *</label>
+                    <input type="datetime-local" id="fecha" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Título *</label>
+                    <input type="text" id="titulo" placeholder="Ej: Accidente en Malecón" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Tipo de Incidencia *</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="tipo" value="accidente"> 🚗 Accidente</label>
+                        <label><input type="checkbox" name="tipo" value="robo"> 🔫 Robo</label>
+                        <label><input type="checkbox" name="tipo" value="pelea"> 🥊 Pelea</label>
+                        <label><input type="checkbox" name="tipo" value="desastre"> 🌪️ Desastre</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Descripción *</label>
+                    <textarea id="descripcion" rows="4" placeholder="Describa los detalles..." required></textarea>
+                </div>
+            </div>
+
+            <!-- Ubicación -->
+            <div class="form-section">
+                <h2>📍 Ubicación</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Provincia *</label>
+                        <select id="provincia" onchange="actualizarMunicipios()" required>
+                            <option value="">Seleccione</option>
+                            <option value="santo_domingo">Santo Domingo</option>
+                            <option value="santiago">Santiago</option>
+                            <option value="la_vega">La Vega</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Municipio *</label>
+                        <select id="municipio" required>
+                            <option value="">Primero seleccione provincia</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Barrio</label>
+                    <input type="text" id="barrio" placeholder="Nombre del barrio">
+                </div>
+                
+                <div class="form-group">
+                    <label>Coordenadas</label>
+                    <input type="text" id="coordenadas" placeholder="18.4861, -69.9312">
+                    <button type="button" onclick="detectarUbicacion()">📍 Detectar Mi Ubicación</button>
+                </div>
+            </div>
+
+            <!-- Impacto -->
+            <div class="form-section">
+                <h2>⚠️ Impacto</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Muertos</label>
+                        <input type="number" id="muertos" min="0" value="0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Heridos</label>
+                        <input type="number" id="heridos" min="0" value="0">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Pérdida Estimada (RD$)</label>
+                        <input type="number" id="perdida" min="0" placeholder="50000">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Link Redes Sociales</label>
+                        <input type="url" id="redes" placeholder="https://...">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Evidencia -->
+            <div class="form-section">
+                <h2>📸 Evidencia</h2>
+                
+                <div class="form-group">
+                    <label>Foto del Hecho</label>
+                    <input type="file" id="foto" accept="image/*">
+                </div>
+            </div>
+
+            <!-- Botones -->
+            <div class="form-actions">
+                <button type="button" onclick="guardarBorrador()">💾 Guardar Borrador</button>
+                <button type="submit" class="btn-primary">📤 Enviar Reporte</button>
+            </div>
+        </form>
+
+        <!-- Área de Mensajes -->
+        <div id="mensaje" class="mensaje"></div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

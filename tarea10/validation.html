@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Validación - Incidencias RD</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navegación -->
+    <nav class="navbar">
+        <div class="nav-brand">🚨 Incidencias RD</div>
+        <div class="nav-links">
+            <a href="index.html">Inicio</a>
+            <a href="login.html">Login</a>
+            <a href="report.html">Reportar</a>
+            <a href="validation.html" class="active">Validador</a>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <main class="container">
+        <h1>✅ Panel de Validación</h1>
+        
+        <!-- Estadísticas -->
+        <div class="validation-stats">
+            <div class="stat-card">
+                <h3>5</h3>
+                <p>Pendientes</p>
+            </div>
+            <div class="stat-card">
+                <h3>23</h3>
+                <p>Aprobados Hoy</p>
+            </div>
+            <div class="stat-card">
+                <h3>3</h3>
+                <p>Rechazados</p>
+            </div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="validation-filters">
+            <select id="estado-filter">
+                <option value="">Todos los estados</option>
+                <option value="pendiente" selected>Pendientes</option>
+                <option value="aprobado">Aprobados</option>
+                <option value="rechazado">Rechazados</option>
+            </select>
+            
+            <select id="tipo-filter">
+                <option value="">Todos los tipos</option>
+                <option value="accidente">Accidentes</option>
+                <option value="robo">Robos</option>
+            </select>
+            
+            <button onclick="actualizarReportes()">🔄 Actualizar</button>
+        </div>
+
+        <!-- Lista de Reportes -->
+        <div class="reportes-lista">
+            <!-- Reporte 1 -->
+            <div class="reporte-card" data-id="1">
+                <div class="reporte-header">
+                    <h3>🚗 Accidente de tránsito en Malecón</h3>
+                    <span class="estado-badge pendiente">PENDIENTE</span>
+                </div>
+                
+                <div class="reporte-info">
+                    <p><strong>📅 Fecha:</strong> 17/08/2025 - 14:30</p>
+                    <p><strong>📍 Ubicación:</strong> Santo Domingo, Distrito Nacional</p>
+                    <p><strong>👤 Reportado por:</strong> usuario@gmail.com</p>
+                    <p><strong>📝 Descripción:</strong> Colisión entre dos vehículos en el Malecón...</p>
+                    <p><strong>⚠️ Impacto:</strong> 0 muertos, 3 heridos</p>
+                </div>
+                
+                <div class="reporte-acciones">
+                    <button class="btn btn-success" onclick="aprobarReporte(1)">✅ Aprobar</button>
+                    <button class="btn btn-danger" onclick="rechazarReporte(1)">❌ Rechazar</button>
+                    <button class="btn btn-secondary" onclick="editarReporte(1)">✏️ Editar</button>
+                </div>
+            </div>
+
+            <!-- Reporte 2 -->
+            <div class="reporte-card" data-id="2">
+                <div class="reporte-header">
+                    <h3>🔫 Robo en supermercado</h3>
+                    <span class="estado-badge pendiente">PENDIENTE</span>
+                </div>
+                
+                <div class="reporte-info">
+                    <p><strong>📅 Fecha:</strong> 17/08/2025 - 10:15</p>
+                    <p><strong>📍 Ubicación:</strong> Santiago, Santiago</p>
+                    <p><strong>👤 Reportado por:</strong> testigo@hotmail.com</p>
+                    <p><strong>📝 Descripción:</strong> Asalto a mano armada en supermercado...</p>
+                    <p><strong>⚠️ Impacto:</strong> 0 muertos, 1 herido</p>
+                </div>
+                
+                <div class="reporte-acciones">
+                    <button class="btn btn-success" onclick="aprobarReporte(2)">✅ Aprobar</button>
+                    <button class="btn btn-danger" onclick="rechazarReporte(2)">❌ Rechazar</button>
+                    <button class="btn btn-secondary" onclick="editarReporte(2)">✏️ Editar</button>
+                </div>
+            </div>
+
+            <!-- Reporte Similar -->
+            <div class="reporte-card similar" data-id="3">
+                <div class="reporte-header">
+                    <h3>🚗 Choque en Malecón</h3>
+                    <span class="estado-badge pendiente">PENDIENTE</span>
+                    <span class="similar-badge">📎 Similar al #1</span>
+                </div>
+                
+                <div class="reporte-info">
+                    <p><strong>📅 Fecha:</strong> 17/08/2025 - 14:35</p>
+                    <p><strong>📍 Ubicación:</strong> Santo Domingo, Distrito Nacional</p>
+                    <p><strong>👤 Reportado por:</strong> testigo2@gmail.com</p>
+                    <p><strong>📝 Descripción:</strong> Vi el accidente en el Malecón...</p>
+                </div>
+                
+                <div class="reporte-acciones">
+                    <button class="btn btn-warning" onclick="unirReportes(1,3)">🔗 Unir con #1</button>
+                    <button class="btn btn-secondary" onclick="marcarUnico(3)">🆔 Marcar Único</button>
+                    <button class="btn btn-danger" onclick="rechazarReporte(3)">❌ Rechazar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Área de Mensajes -->
+        <div id="mensaje" class="mensaje"></div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

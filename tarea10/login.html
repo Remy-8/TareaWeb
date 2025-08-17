@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Incidencias RD</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navegación -->
+    <nav class="navbar">
+        <div class="nav-brand">🚨 Incidencias RD</div>
+        <div class="nav-links">
+            <a href="index.html">Inicio</a>
+            <a href="login.html" class="active">Login</a>
+            <a href="report.html">Reportar</a>
+            <a href="validation.html">Validador</a>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <main class="container">
+        <div class="login-container">
+            <div class="login-box">
+                <h1>Iniciar Sesión</h1>
+                
+                <!-- Login OAuth Simulado -->
+                <div class="oauth-section">
+                    <h3>Reporteros</h3>
+                    <button class="btn-oauth" onclick="loginOAuth('gmail')">
+                        📧 Continuar con Gmail
+                    </button>
+                    <button class="btn-oauth" onclick="loginOAuth('office')">
+                        🏢 Continuar con Office 365
+                    </button>
+                </div>
+
+                <div class="divider">O</div>
+
+                <!-- Login Tradicional -->
+                <div class="login-section">
+                    <h3>Validadores</h3>
+                    <form onsubmit="return loginValidador(event)">
+                        <div class="form-group">
+                            <label>Usuario:</label>
+                            <input type="text" id="usuario" placeholder="admin" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Contraseña:</label>
+                            <input type="password" id="password" placeholder="admin123" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            🔐 Acceder como Validador
+                        </button>
+                    </form>
+                    
+                    <div class="help-text">
+                        <small>Credenciales de prueba: admin / admin123</small>
+                    </div>
+                </div>
+
+                <!-- Área de Mensajes -->
+                <div id="mensaje" class="mensaje"></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

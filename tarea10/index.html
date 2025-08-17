@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Reporte de Incidencias RD</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navegación -->
+    <nav class="navbar">
+        <div class="nav-brand">🚨 Incidencias RD</div>
+        <div class="nav-links">
+            <a href="index.html" class="active">Inicio</a>
+            <a href="login.html">Login</a>
+            <a href="report.html">Reportar</a>
+            <a href="validation.html">Validador</a>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <main class="container">
+        <h1>Mapa de Incidencias</h1>
+        
+        <!-- Filtros Simples -->
+        <div class="filters">
+            <select id="provincia-filter">
+                <option value="">Todas las provincias</option>
+                <option value="santo_domingo">Santo Domingo</option>
+                <option value="santiago">Santiago</option>
+            </select>
+            
+            <select id="tipo-filter">
+                <option value="">Todos los tipos</option>
+                <option value="accidente">Accidente</option>
+                <option value="robo">Robo</option>
+            </select>
+            
+            <input type="text" id="buscar" placeholder="Buscar...">
+            <button onclick="aplicarFiltros()">Filtrar</button>
+        </div>
+
+        <!-- Área del Mapa (Simulado) -->
+        <div class="mapa-container">
+            <div class="mapa-placeholder">
+                <h2>🗺️ AQUÍ VA EL MAPA</h2>
+                <p>En el proyecto final aquí estará el mapa interactivo</p>
+                
+                <!-- Marcadores Simulados -->
+                <div class="marcador accidente" onclick="mostrarDetalle(1)">🚗</div>
+                <div class="marcador robo" onclick="mostrarDetalle(2)">🔫</div>
+                <div class="marcador pelea" onclick="mostrarDetalle(3)">🥊</div>
+            </div>
+        </div>
+
+        <!-- Estadísticas Simples -->
+        <div class="estadisticas">
+            <div class="stat-card">
+                <h3>25</h3>
+                <p>Incidencias Hoy</p>
+            </div>
+            <div class="stat-card">
+                <h3>8</h3>
+                <p>Pendientes</p>
+            </div>
+            <div class="stat-card">
+                <h3>17</h3>
+                <p>Aprobadas</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Simple -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="cerrarModal()">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
