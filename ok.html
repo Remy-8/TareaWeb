@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Esquina de Papolo - Gestión de Ferretería</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #004aad;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 { color: #004aad; }
+    input, button {
+      padding: 8px;
+      margin: 4px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      cursor: pointer;
+      background-color: #004aad;
+      color: white;
+      border: none;
+      transition: 0.3s;
+    }
+    button:hover { background-color: #007bff; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: center;
+    }
+    th { background-color: #004aad; color: white; }
+    .login-box {
+      max-width: 350px;
+      margin: 100px auto;
+      text-align: center;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    .total {
+      margin-top: 10px;
+      font-weight: bold;
+      text-align: right;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🧱 La Esquina de Papolo - Sistema de Inventario</h1>
+  </header>
+
+  <!-- Login -->
+  <div id="login" class="login-box">
+    <h2>Iniciar Sesión</h2>
+    <input type="text" id="user" placeholder="Usuario"><br>
+    <input type="password" id="pass" placeholder="Contraseña"><br>
+    <button onclick="login()">Entrar</button>
+
+  </div>
+
+  <!-- Aplicación -->
+  <div id="app" class="container" style="display:none;">
+    <h2>Gestión de Inventario</h2>
+    <p id="roleInfo"></p>
+    <input type="text" id="search" placeholder="Buscar producto..." onkeyup="buscarProducto()">
+    <div>
+      <input type="text" id="nombre" placeholder="Nombre del producto">
+      <input type="number" id="precio" placeholder="Precio (RD$)">
+      <input type="number" id="cantidad" placeholder="Cantidad">
+      <button onclick="agregarProducto()">Agregar producto</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Precio (RD$)</th>
+          <th>Cantidad</th>
+          <th>Fecha</th>
+          <th>Total (RD$)</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="tablaProductos"></tbody>
+    </table>
+
+    <p class="total">Valor total del inventario: <span id="valorTotal">0</span> RD$</p>
+  </div>
+
+  <script>
+    let productos = JSON.parse(localStorage.getItem('productos')) || [];
+
+    let usuarioActual = null;
+
+    function login() {
+      const u = document.getElementById('user').value;
+      const p = document.getElementById('pass').value;
+      const validos = [
+        { usuario: 'admin', pass: '1234', rol: 'Administrador' },
+        { usuario: 'vendedor', pass: '1234', rol: 'Vendedor' }
+      ];
+      const encontrado = validos.find(v => v.usuario === u && v.pass === p);
+      if (encontrado) {
+        usuarioActual = encontrado;
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+        document.getElementById('roleInfo').textContent = 
+          `Has iniciado sesión como: ${usuarioActual.rol}`;
+        mostrarProductos();
+      } else {
+        alert("Credenciales incorrectas.");
+      }
+    }
+
+    function agregarProducto() {
+      const nombre = document.getElementById('nombre').value.trim();
+      const precio = parseFloat(document.getElementById('precio').value);
+      const cantidad = parseInt(document.getElementById('cantidad').value);
+
+      if (!nombre || !precio || !cantidad) return alert("Completa todos los campos.");
+      if (productos.some(p => p.nombre.toLowerCase() === nombre.toLowerCase())) 
+        return alert("Ese producto ya existe.");
+
+      const fecha = new Date().toLocaleDateString();
+      const total = precio * cantidad;
+      productos.push({ nombre, precio, cantidad, fecha, total });
+      guardarYActualizar();
+      limpiar();
+    }
+
+    function mostrarProductos(filtro = "") {
+      const tabla = document.getElementById('tablaProductos');
+      tabla.innerHTML = "";
+      let valorTotal = 0;
+      productos
+        .filter(p => p.nombre.toLowerCase().includes(filtro.toLowerCase()))
+        .forEach((p, i) => {
+          valorTotal += p.total;
+          tabla.innerHTML += `
+            <tr>
+              <td>${p.nombre}</td>
+              <td>${p.precio.toFixed(2)}</td>
+              <td>${p.cantidad}</td>
+              <td>${p.fecha}</td>
+              <td>${p.total.toFixed(2)}</td>
+              <td>
+                <button onclick="editar(${i})">✏️</button>
+                <button onclick="eliminar(${i})">🗑️</button>
+              </td>
+            </tr>`;
+        });
+      document.getElementById('valorTotal').textContent = valorTotal.toFixed(2);
+    }
+
+    function editar(i) {
+      if (usuarioActual.rol !== "Administrador") return alert("Solo el admin puede editar.");
+      const p = productos[i];
+      const nuevoPrecio = prompt("Nuevo precio:", p.precio);
+      const nuevaCantidad = prompt("Nueva cantidad:", p.cantidad);
+      if (nuevoPrecio && nuevaCantidad) {
+        productos[i].precio = parseFloat(nuevoPrecio);
+        productos[i].cantidad = parseInt(nuevaCantidad);
+        productos[i].total = productos[i].precio * productos[i].cantidad;
+        guardarYActualizar();
+      }
+    }
+
+    function eliminar(i) {
+      if (usuarioActual.rol !== "Administrador") return alert("Solo el admin puede eliminar.");
+      if (confirm("¿Seguro que deseas eliminar este producto?")) {
+        productos.splice(i, 1);
+        guardarYActualizar();
+      }
+    }
+
+    function buscarProducto() {
+      const texto = document.getElementById('search').value;
+      mostrarProductos(texto);
+    }
+
+    function guardarYActualizar() {
+      localStorage.setItem('productos', JSON.stringify(productos));
+      mostrarProductos();
+    }
+
+    function limpiar() {
+      document.getElementById('nombre').value = "";
+      document.getElementById('precio').value = "";
+      document.getElementById('cantidad').value = "";
+    }
+  </script>
+</body>
+</html>
